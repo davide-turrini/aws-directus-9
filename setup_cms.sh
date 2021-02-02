@@ -122,11 +122,11 @@ EOF
 	 
 	echo "Type the following npm action to package.json ;   \"start\": \"npx directus start\""
 
-	pm2 start npm --name "directus" -- start
+	pm2 start npm --name "${PROJ_NAME}" -- start
 
 	echo -e "\n### Project ${PROJ_NAME}
 	localhost
-		reverse_proxy 127.0.0.1:8055" >>"~/Caddyfile"
+		reverse_proxy 127.0.0.1:8055" >>"/home/ec2-user/Caddyfile"
 
 	echo "Type caddy run to get started"
 
