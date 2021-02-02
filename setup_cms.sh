@@ -7,6 +7,16 @@ function setup() {
 		exit 1
 	fi
 
+	echo <<EOF
+press any key to start installation:
+	- mysql 8 (automatically secured)
+	- node.js
+	- pm2
+	- firewalld
+	- caddy
+	- 1GB swap space
+	- directus project in home
+EOF
 	echo "Setting up database"
 	sudo yum install https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm -y
 	sudo amazon-linux-extras install epel -y
@@ -15,6 +25,8 @@ function setup() {
 
 	OLD_ROOT_PASS=$(sudo grep 'temporary password' /var/log/mysqld.log | grep -o 'root@localhost: .*' | cut -d ' ' -f 2)
 	NEW_ROOT_PASS=$(tr -dc 'A-Za-z0-9*+-' </dev/urandom | head -c 20)
+	echo "detected temporary password: ${OLD_ROOT_PASS}"
+	echo "generated root password: ${NEW_ROOT_PASS}"
 
 	yum install expect -y
 
@@ -77,10 +89,14 @@ expect eof
 	free
 
 	touch ~/Caddyfile
+	echo "generated mysql root password: ${NEW_ROOT_PASS}"
+	touch ~/mysql.root.password
+	echo "$NEW_ROOT_PASS" > "~/mysql.root.password"
 }
 
 function addProject() {
 
+	NEW_ROOT_PASS=$(cat ~/mysql.root.password)
 	until [[ ${PROJ_NAME} =~ ^[a-zA-Z0-9_-]+$ && ${PROJ_EXISTS} == '0' && ${#PROJ_NAME} -lt 16 ]]; do
 		read -rp "Project name: " -e PROJ_NAME
 		PROJ_EXISTS=$(grep -c -E "^### Project ${PROJ_NAME}\$" "~/Caddyfile")
@@ -127,4 +143,5 @@ if [[ -e ~/Caddyfile ]]; then
 	addProject
 else
 	setup
+	addProject
 fi
