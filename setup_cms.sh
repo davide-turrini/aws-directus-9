@@ -1,12 +1,6 @@
 #!/bin/bash
 function setup() {
 
-	# Check for root
-	if [ "${EUID}" -ne 0 ]; then
-		echo "You need to run this script as root"
-		exit 1
-	fi
-
 	echo <<EOF
 press any key to start installation:
 	- mysql 8 (automatically secured)
