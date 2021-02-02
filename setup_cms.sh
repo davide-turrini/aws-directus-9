@@ -65,6 +65,7 @@ expect eof
 
 	echo "Setting up server node, pm2, firewall, caddy"
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+	rm -R ~/.npm ~/.nvm
 	. ~/.nvm/nvm.sh
 	nvm install node
 	node -e "console.log('Running Node.js ' + process.version)"
