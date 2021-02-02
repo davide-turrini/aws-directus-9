@@ -99,7 +99,7 @@ function addProject() {
 	NEW_ROOT_PASS=$(cat /home/ec2-user/mysql.root.password)
 	until [[ ${PROJ_NAME} =~ ^[a-zA-Z0-9_-]+$ && ${PROJ_EXISTS} == '0' && ${#PROJ_NAME} -lt 16 ]]; do
 		read -rp "Project name: " -e PROJ_NAME
-		PROJ_EXISTS=$(grep -c -E "^### Project ${PROJ_NAME}\$" "~/Caddyfile")
+		PROJ_EXISTS=$(grep -c -E "^### Project ${PROJ_NAME}\$" "/home/ec2-user/Caddyfile")
 		if [[ ${PROJ_EXISTS} == '1' ]]; then
 			echo "Project already exists!!"
 		fi
