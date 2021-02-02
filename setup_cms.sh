@@ -106,13 +106,12 @@ function addProject() {
 	done
 
 	# STEP 1.2 type the following
-	mysql -uroot -p${NEW_ROOT_PASS} <<<EOF
+	mysql -uroot -p${NEW_ROOT_PASS} -e "
 CREATE DATABASE ${PROJ_NAME} DEFAULT CHARACTER SET = 'utf8mb4' DEFAULT COLLATE = 'utf8mb4_0900_ai_ci';
 CREATE USER '${PROJ_NAME}'@'localhost' IDENTIFIED BY '${PROJ_NAME}.unipass.local';
 GRANT SHOW VIEW, LOCK TABLES, CREATE, EVENT, EXECUTE, INSERT, DROP, INDEX, ALTER ROUTINE, SELECT, TRIGGER, UPDATE, ALTER, CREATE TEMPORARY TABLES, DELETE, GRANT OPTION, CREATE VIEW, REFERENCES, CREATE ROUTINE ON '${PROJ_NAME}'.* TO '${PROJ_NAME}'@'localhost';
 FLUSH PRIVILEGES;
-quit
-EOF
+quit"
 
 	echo "your generated database is: ${PROJ_NAME}"
 	echo "your generated user is: ${PROJ_NAME}"
