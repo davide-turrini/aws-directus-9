@@ -88,15 +88,15 @@ expect eof
 	sudo sh -c "echo /swapfile swap swap defaults 0 0 >> /etc/fstab"
 	free
 
-	touch ~/Caddyfile
+	touch /home/ec2-user/Caddyfile
 	echo "generated mysql root password: ${NEW_ROOT_PASS}"
-	touch ~/mysql.root.password
-	echo "$NEW_ROOT_PASS" > "~/mysql.root.password"
+	touch /home/ec2-user/mysql.root.password
+	echo "$NEW_ROOT_PASS" > "/home/ec2-user/mysql.root.password"
 }
 
 function addProject() {
 
-	NEW_ROOT_PASS=$(cat ~/mysql.root.password)
+	NEW_ROOT_PASS=$(cat /home/ec2-user/mysql.root.password)
 	until [[ ${PROJ_NAME} =~ ^[a-zA-Z0-9_-]+$ && ${PROJ_EXISTS} == '0' && ${#PROJ_NAME} -lt 16 ]]; do
 		read -rp "Project name: " -e PROJ_NAME
 		PROJ_EXISTS=$(grep -c -E "^### Project ${PROJ_NAME}\$" "~/Caddyfile")
@@ -135,11 +135,10 @@ EOF
 	IPV6=$(ip -6 addr | sed -ne 's|^.* inet6 \([^/]*\)/.* scope global.*$|\1|p' | head -1)
 	echo "detected public IPV4: ${IPV4}"
 	echo "detected public IPV6: ${IPV6}"
-
 }
 
 # Check if Caddy is already created (aws has just been set up)
-if [[ -e ~/Caddyfile ]]; then
+if [[ -e /home/ec2-user/Caddyfile ]]; then
 	addProject
 else
 	setup
