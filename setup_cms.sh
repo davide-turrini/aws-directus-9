@@ -58,10 +58,8 @@ expect eof
 	echo "$SECURE_MYSQL"
 
 	echo "Setting up server node, pm2, firewall, caddy"
-	rm -rf /home/ec2-user/.npm /home/ec2-user/.nvm
-	sudo -u ec2-user curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-	sudo -u ec2-user /home/ec2-user/.nvm/nvm.sh
-	sudo -u ec2-user nvm install node
+	curl -sL https://rpm.nodesource.com/setup_15.x | sudo bash -
+	sudo yum install -y nodejs
 	node -e "console.log('Running Node.js ' + process.version)"
 	npm install pm2 -g
 	sudo yum install yum-plugin-copr -y
