@@ -7,15 +7,6 @@ function setup() {
 		exit 1
 	fi
 
-	# Check OS version
-	if [[ -e /etc/debian_version ]]; then
-		source /etc/os-release
-		OS="${ID}" # debian or ubuntu
-	else
-		echo "Looks like you aren't running this installer on AWS EC2 linux"
-		exit 1
-	fi
-
 	echo "Setting up database"
 	sudo yum install https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm -y
 	sudo amazon-linux-extras install epel -y
