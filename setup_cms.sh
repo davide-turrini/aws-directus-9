@@ -68,8 +68,8 @@ expect eof
 	sudo -u ec2-user curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 	sudo -u ec2-user /home/ec2-user/.nvm/nvm.sh
 	sudo -u ec2-user nvm install node
-	sudo -u ec2-user node -e "console.log('Running Node.js ' + process.version)"
-	sudo -u ec2-user npm install pm2 -g
+	node -e "console.log('Running Node.js ' + process.version)"
+	npm install pm2 -g
 	sudo yum install yum-plugin-copr -y
 	sudo yum copr enable @caddy/caddy -y
 	sudo yum install caddy -y
