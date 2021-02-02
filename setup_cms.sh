@@ -65,11 +65,9 @@ expect eof
 
 	echo "Setting up server node, pm2, firewall, caddy"
 	rm -rf /home/ec2-user/.npm /home/ec2-user/.nvm
-	sudo -H -u ec2-user bash -c "
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-	. /home/ec2-user/.nvm/nvm.sh
+	sudo -u ec2-user /home/ec2-user/.nvm/nvm.sh
 	nvm install node
-	"
 	node -e "console.log('Running Node.js ' + process.version)"
 	npm install pm2 -g
 	sudo yum install yum-plugin-copr -y
