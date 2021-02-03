@@ -22,40 +22,16 @@ EOF
 	echo "detected temporary password: ${OLD_ROOT_PASS}"
 	echo "generated root password: ${NEW_ROOT_PASS}"
 
-	yum install expect -y
+	# STEP 1.2 type the following
+	mysql -uroot -p${OLD_ROOT_PASS} -e "
+UPDATE mysql.user SET Password=PASSWORD('${NEW_ROOT_PASS}') WHERE User='root';
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+FLUSH PRIVILEGES;
+quit"
 
-	SECURE_MYSQL=$(expect -c "
-
-set timeout 10
-spawn mysql_secure_installation
-
-expect "Enter password for user root:"
-send "$OLD_ROOT_PASS\r"
-
-expect "Set root password?"
-send "y\r"
-
-expect "New password:"
-send "$NEW_ROOT_PASS\r"
-
-expect "Re-enter new password:"
-send "$NEW_ROOT_PASS\r"
-
-expect "Remove anonymous users?"
-send "y\r"
-
-expect "Disallow root login remotely?"
-send "y\r"
-
-expect "Remove test database and access to it?"
-send "y\r"
-
-expect "Reload privilege tables now?"
-send "y\r"
-expect eof
-")
-
-	echo "$SECURE_MYSQL"
 
 	echo "Setting up server node, pm2, firewall, caddy"
 	curl -sL https://rpm.nodesource.com/setup_15.x | sudo bash -
