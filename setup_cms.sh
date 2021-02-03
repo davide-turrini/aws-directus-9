@@ -23,7 +23,7 @@ EOF
 	echo "generated root password: ${NEW_ROOT_PASS}"
 
 	# STEP 1.2 type the following
-	mysql -uroot -p"${OLD_ROOT_PASS}" -e "
+	mysql -uroot -p"'${OLD_ROOT_PASS}'" -e "
 UPDATE mysql.user SET Password=PASSWORD('${NEW_ROOT_PASS}') WHERE User='root';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
@@ -74,7 +74,7 @@ function addProject() {
 	done
 
 	# STEP 1.2 type the following
-	mysql -uroot -p"${NEW_ROOT_PASS}" -e "
+	mysql -uroot -p"'${NEW_ROOT_PASS}'" -e "
 CREATE DATABASE ${PROJ_NAME} DEFAULT CHARACTER SET = 'utf8mb4' DEFAULT COLLATE = 'utf8mb4_0900_ai_ci';
 CREATE USER '${PROJ_NAME}'@'localhost' IDENTIFIED BY '${PROJ_NAME}.unipass.local';
 GRANT SHOW VIEW, LOCK TABLES, CREATE, EVENT, EXECUTE, INSERT, DROP, INDEX, ALTER ROUTINE, SELECT, TRIGGER, UPDATE, ALTER, CREATE TEMPORARY TABLES, DELETE, GRANT OPTION, CREATE VIEW, REFERENCES, CREATE ROUTINE ON '${PROJ_NAME}'.* TO '${PROJ_NAME}'@'localhost';
