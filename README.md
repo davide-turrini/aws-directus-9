@@ -6,17 +6,20 @@ We are talking about a simple to do list to get Directus 9 running on a EC2 ista
 
 ### First of all..
 
-type this in your ssh terminal in order to get all the resources installed.
+type this in your ssh terminal in order to get all the 
+resources listed below installed.
+
+```
+curl https://raw.githubusercontent.com/davide-turrini/aws_cms/master/setup.sh > setup.sh && chmod +x setup.sh && sudo ./setup.sh && rm -rf setup.sh
+```
+
+
  - Mysql 8, secured
  - Node.js 15.x
  - PM2
  - Caddy as a reverse proxy
  - Firewalld to allow HTTP/HTTPS only
 
-
-```
-curl https://raw.githubusercontent.com/davide-turrini/aws_cms/master/setup.sh > setup.sh && chmod +x setup.sh && sudo ./setup.sh && rm -rf setup.sh
-```
 
 ##### (AND IF YOU RUN OUT OF RAM ..)
 
