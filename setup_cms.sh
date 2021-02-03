@@ -1,7 +1,7 @@
 #!/bin/bash
 function setup() {
 
-	echo <<EOF
+	echo "
 press any key to start installation:
 	- mysql 8 (automatically secured)
 	- node.js
@@ -10,7 +10,8 @@ press any key to start installation:
 	- caddy
 	- 1GB swap space
 	- directus project in home
-EOF
+"
+	read _
 	echo "Setting up database"
 	sudo yum install https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm -y
 	sudo amazon-linux-extras install epel -y
@@ -18,20 +19,20 @@ EOF
 	sudo systemctl enable --now mysqld
 
 	OLD_ROOT_PASS=$(sudo grep 'temporary password' /var/log/mysqld.log | grep -o 'root@localhost: .*' | cut -d ' ' -f 2)
-	NEW_ROOT_PASS=$(tr -dc 'A-Za-z0-9*+-' </dev/urandom | head -c 20)
+	NEW_ROOT_PASS=${OLD_ROOT_PASS}$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 6)
 	echo "detected temporary password: ${OLD_ROOT_PASS}"
 	echo "generated root password: ${NEW_ROOT_PASS}"
 
 	# STEP 1.2 type the following
-	mysql -uroot -p"'${OLD_ROOT_PASS}'" -e "
-UPDATE mysql.user SET Password=PASSWORD('${NEW_ROOT_PASS}') WHERE User='root';
+	mysql -uroot -p${OLD_ROOT_PASS} --connect-expired-password <<EOF
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${NEW_ROOT_PASS}';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEGES;
-quit"
-
+quit
+EOF
 	echo "Setting up server node, pm2, firewall, caddy"
 	curl -sL https://rpm.nodesource.com/setup_15.x | sudo bash -
 	sudo yum install -y nodejs
@@ -74,16 +75,17 @@ function addProject() {
 	done
 
 	# STEP 1.2 type the following
-	mysql -uroot -p"'${NEW_ROOT_PASS}'" -e "
+	mysql -uroot -p${NEW_ROOT_PASS} <<EOF
 CREATE DATABASE ${PROJ_NAME} DEFAULT CHARACTER SET = 'utf8mb4' DEFAULT COLLATE = 'utf8mb4_0900_ai_ci';
-CREATE USER '${PROJ_NAME}'@'localhost' IDENTIFIED BY '${PROJ_NAME}.unipass.local';
-GRANT SHOW VIEW, LOCK TABLES, CREATE, EVENT, EXECUTE, INSERT, DROP, INDEX, ALTER ROUTINE, SELECT, TRIGGER, UPDATE, ALTER, CREATE TEMPORARY TABLES, DELETE, GRANT OPTION, CREATE VIEW, REFERENCES, CREATE ROUTINE ON '${PROJ_NAME}'.* TO '${PROJ_NAME}'@'localhost';
+CREATE USER '${PROJ_NAME}'@'localhost' IDENTIFIED BY '${PROJ_NAME}.UNIPASS.local.0';
+GRANT SHOW VIEW, LOCK TABLES, CREATE, EVENT, EXECUTE, INSERT, DROP, INDEX, ALTER ROUTINE, SELECT, TRIGGER, UPDATE, ALTER, CREATE TEMPORARY TABLES, DELETE, GRANT OPTION, CREATE VIEW, REFERENCES, CREATE ROUTINE ON ${PROJ_NAME}.* TO '${PROJ_NAME}'@'localhost';
 FLUSH PRIVILEGES;
-quit"
+quit
+EOF
 
 	echo "your generated database is: ${PROJ_NAME}"
 	echo "your generated user is: ${PROJ_NAME}"
-	echo "user generated password is: ${PROJ_NAME}.unipass.local"
+	echo "user generated password is: ${PROJ_NAME}.UNIPASS.local.0"
 
 	npx create-directus-project ${PROJ_NAME}
 	 
