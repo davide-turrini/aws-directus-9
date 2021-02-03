@@ -10,7 +10,7 @@ type this in your ssh terminal in order to get all the
 resources listed below installed.
 
 ```
-curl https://raw.githubusercontent.com/davide-turrini/aws_cms/master/setup.sh > setup.sh && chmod +x setup.sh && sudo ./setup.sh && rm -rf setup.sh
+curl https://raw.githubusercontent.com/davide-turrini/aws-directus-9/master/setup.sh > setup.sh && chmod +x setup.sh && sudo ./setup.sh && rm -rf setup.sh
 ```
 
 
@@ -26,14 +26,14 @@ curl https://raw.githubusercontent.com/davide-turrini/aws_cms/master/setup.sh > 
 type this in your ssh terminal in order to get 1GB more of swap memory
 
 ```
-curl https://raw.githubusercontent.com/davide-turrini/aws_cms/master/swap.sh > swap.sh && chmod +x swap.sh && sudo ./swap.sh && rm -rf swap.sh
+curl https://raw.githubusercontent.com/davide-turrini/aws-directus-9/master/swap.sh > swap.sh && chmod +x swap.sh && sudo ./swap.sh && rm -rf swap.sh
 ```
 
 #### PREPARE A DATABASE FOR EVERY PROJECT
 
 before creating a directus project make a database and a user by typing the following.. 
 ```
-curl https://raw.githubusercontent.com/davide-turrini/aws_cms/master/db.sh > db.sh && chmod +x db.sh && sudo ./db.sh && rm -rf db.sh
+curl https://raw.githubusercontent.com/davide-turrini/aws-directus-9/master/db.sh > db.sh && chmod +x db.sh && sudo ./db.sh && rm -rf db.sh
 ```
 
 #### CREATE YOUR PROJECT
