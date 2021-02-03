@@ -47,13 +47,13 @@ curl https://raw.githubusercontent.com/davide-turrini/aws-directus-9/master/db.s
 - remember to add this script in your package.json
 
     ```
-        "start": "npx directus start"
+    "start": "npx directus start"
     ```
 
 - type this to link with your PM2 dashboard
     
     ```
-        pm2 start npm --name "<your project name!>" -- start
+    pm2 start npm --name "<your project name!>" -- start
     ```
 
 - type this to run reverse proxy on port 80
