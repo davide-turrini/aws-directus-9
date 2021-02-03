@@ -25,23 +25,4 @@ echo "
 your generated database is: ${PROJ_NAME}
 your generated user is: ${PROJ_NAME}
 user generated password is: ${PROJ_NAME}.UNIPASS.local.0
-
-STEP 1, type this to create the directus project: 
-
-	npx create-directus-project ${PROJ_NAME}
-
-
-STEP 2, remember to add this script in your package.json
-
-	\"start\": \"npx directus start\"
-
-
-STEP 3, type this to link with your PM2 dashboard
-
-	pm2 start npm --name "${PROJ_NAME}" -- start
-
-
-STEP 4, type this to run reverse proxy on port 80
-
-	caddy run
 "
