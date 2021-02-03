@@ -56,10 +56,12 @@ curl https://raw.githubusercontent.com/davide-turrini/aws-directus-9/master/db.s
     pm2 start npm --name "<your project name!>" -- start
     ```
 
-- type this to run reverse proxy on port 80
+- type this to run reverse proxy on port 443
 
     ```
-    caddy run
+    caddy validate
+
+    sudo caddy start
     ```
   
 Congrats! You have finished. A Caddyfile should have been added in your home directory!
